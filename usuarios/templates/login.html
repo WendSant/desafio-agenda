@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block 'titulo' %}
+Login
+{% endblock %}
+
+{% block 'conteudo' %}
+    <div class="container">
+    <br>
+        {% if status == '1' %}
+            <div class="alert alert-danger" role="alert">
+            Usuário e/ou senha incorretos!
+            </div>
+        {% endif %}
+        {% if status == '2' %}
+            <div class="alert alert-danger" role="alert">
+            Erro no sistema!
+            </div>
+        {% endif %}
+        {% if status == '3' %}
+            <div class="alert alert-danger" role="alert">
+            Faça login primeiro!
+            </div>
+        {% endif %}
+        {% if status == '4' %}
+            <div class="alert alert-success" role="alert">
+            Deslogado com sucesso!
+            </div>
+        {% endif %}
+<br>
+        <form method="POST" action="{% url 'valida_login' %}">{% csrf_token %}
+            <label>Email:</label>
+            <input name="email" class="form-control" type="text" placeholder="Digite seu email">
+            <label>Senha:</label>
+            <input name="senha" class="form-control" type="password" placeholder="Digite sua senha">
+            <br>
+            <input class="btn btn-success" type="submit" value="Entrar">
+            <a class="btn btn-warning" href="{% url 'cadastro' %}"> Cadastrar </a>
+        </form>
+    </div>
+
+{% endblock %}
