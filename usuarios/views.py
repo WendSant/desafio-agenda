@@ -55,7 +55,7 @@ def valida_login(request):
         return redirect('/auth/login/?status=5') #Email não encontrado no sistema
     elif len(usuario) > 0:
         try: #Tentativa de login
-            request.session['usuario'] = usuario[0].id
+            request.session['usuario'] = usuario[0].id #Pegando id usuario
             return redirect('/tarefa/index/')
         except:
             return redirect('/auth/login/?status=2')
