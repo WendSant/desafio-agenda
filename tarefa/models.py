@@ -1,7 +1,7 @@
 from django.db import models
 from usuarios.models import Usuario
 
-status_choice = ('Agendado', 'Agendado'),('Realizado', 'Realizado'), ('Cancelado', 'Cancelado')
+status_choice = ('agendado', 'Agendado'),('realizado', 'Realizado'), ('cancelado', 'Cancelado')
 
 class Tarefas(models.Model):
     status_compromisso = models.CharField(max_length= 200, choices= status_choice)

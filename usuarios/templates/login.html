@@ -1,53 +1,53 @@
 {% load static %}
 <!doctype html>
 <html lang="pt-BR">
-
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
-      <link rel="stylesheet" type="text/css" href="{% static 'usuarios/css/styleUsuarios.css' %}" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-  </head>
-
+    <link rel="stylesheet" type="text/css" href="{% static 'usuarios/css/styleUsuario.css' %}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+          
+</head>
 <body>
-    <div class="container">
+<div class="container">
     <br>
-        {% if status == '1' %}
-            <div class="alert alert-danger" role="alert">
+    {% if status == '1' %}
+        <div class="alert alert-danger" role="alert">
             Senha incorreta!
-            </div>
-        {% endif %}
-        {% if status == '2' %}
-            <div class="alert alert-danger" role="alert">
+        </div>
+    {% endif %}
+    {% if status == '2' %}
+        <div class="alert alert-danger" role="alert">
             Erro no sistema!
-            </div>
-        {% endif %}
-        {% if status == '3' %}
-            <div class="alert alert-danger" role="alert">
+        </div>
+    {% endif %}
+    {% if status == '3' %}
+        <div class="alert alert-danger" role="alert">
             Faça login primeiro!
-            </div>
-        {% endif %}
-        {% if status == '4' %}
-            <div class="alert alert-success" role="alert">
+        </div>
+    {% endif %}
+    {% if status == '4' %}
+        <div class="alert alert-success" role="alert">
             Deslogado com sucesso!
-            </div>
-        {% endif %}
-        {% if status == '5' %}
-            <div class="alert alert-danger" role="alert">
+        </div>
+    {% endif %}
+    {% if status == '5' %}
+        <div class="alert alert-danger" role="alert">
             Email não cadastrado no sistema!
-            </div>
-        {% endif %}
+        </div>
+    {% endif %}
+    <br>
+    <form method="POST" action="{% url 'valida_login' %}">{% csrf_token %}
+        <label>Email:</label>
+        <input name="email" class="form-control" type="text" placeholder="Digite seu email">
+        <label>Senha:</label>
+        <input name="senha" class="form-control" type="password" placeholder="Digite sua senha">
         <br>
-        <form method="POST" action="{% url 'valida_login' %}">{% csrf_token %}
-            <label>Email:</label>
-            <input name="email" class="form-control" type="text" placeholder="Digite seu email">
-            <label>Senha:</label>
-            <input name="senha" class="form-control" type="password" placeholder="Digite sua senha">
-            <br>
-            <input class="btn btn-success" type="submit" value="Entrar">
-            <a class="btn btn-warning" href="{% url 'cadastro' %}"> Cadastrar </a>
-        </form>
-    </div>
+        <input class="btn btn-success" type="submit" value="Entrar">
+        <a class="btn btn-warning" href="{% url 'cadastro' %}"> Cadastrar </a>
+    </form>
+</div>
 </body>
 </html>
