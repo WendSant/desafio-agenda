@@ -27,7 +27,27 @@
         </tr>
         </thead>
         <tbody>
-
+        {% if erro == '1' %}
+            <div class="alert alert-danger" role="alert">
+                Erro no sistema, contate um administrador!
+            </div>
+        {% elif erro == '2' %}
+            <div class="alert alert-danger" role="alert">
+                Tarefa invalida!
+            </div>
+        {% elif erro == '3' %}
+            <div class="alert alert-danger" role="alert">
+                Exite um conflito de horário na data informada!
+            </div>
+        {% elif erro == '4' %}
+            <div class="alert alert-danger" role="alert">
+                Essa data já passou, insira outra!
+            </div>
+            {% elif erro == '5' %}
+            <div class="alert alert-danger" role="alert">
+                Horário invalido!
+            </div>
+        {% endif %}
         {% for tarefa in tarefas %}
             <tr>
                 <div class="modal fade" id="{{ tarefa.id }}" tabindex="-1" role="dialog"
@@ -43,12 +63,14 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form>
+                                <form method="POST" action="{% url 'edicao_Tarefa' %}">{% csrf_token %}
+                                    <input hidden name="id_compromisso" type="text" value="{{ tarefa.id }}">
                                     <div class="input-group input-group-sm mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Compromisso</span>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Small"
+                                        <input name="nome_compromisso" type="text" class="form-control"
+                                               aria-label="Small"
                                                aria-describedby="inputGroup-sizing-sm"
                                                value="{{ tarefa.nome_compromisso.capitalize }}">
                                     </div>
@@ -56,17 +78,31 @@
                                         <div class="input-group-prepend">
                                             <label class="input-group-text" for="inputGroupSelect01">Status</label>
                                         </div>
-                                        <select class="custom-select" id="inputGroupSelect01">
-                                            <option selected value="agendado">Agendado</option>
-                                            <option value="realizado">Realizado</option>
-                                            <option value="cancelado">Cancelado</option>
+                                        <select name="status_compromisso" class="custom-select" id="inputGroupSelect01">
+                                            {% if tarefa.status_compromisso.lower == 'agendado' %}
+                                                <option selected
+                                                        value="{{ tarefa.get_status_compromisso_display }}">{{ tarefa.get_status_compromisso_display }}</option>
+                                                <option value="realizado">Realizado</option>
+                                                <option value="cancelado">Cancelado</option>
+                                            {% elif tarefa.status_compromisso.lower == 'realizado' %}
+                                                <option selected
+                                                        value="{{ tarefa.get_status_compromisso_display }}">{{ tarefa.get_status_compromisso_display }}</option>
+                                                <option value="agendado">Agendado</option>
+                                                <option value="cancelado">Cancelado</option>
+                                            {% elif tarefa.status_compromisso.lower == 'cancelado' %}
+                                                <option selected
+                                                        value="{{ tarefa.get_status_compromisso_display }}">{{ tarefa.get_status_compromisso_display }}</option>
+                                                <option value="agendado">Agendado</option>
+                                                <option value="realizado">Realizado</option>
+                                            {% endif %}
                                         </select>
                                     </div>
                                     <div class="input-group input-group-sm mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Data</span>
                                         </div>
-                                        <input type="date" class="form-control" aria-label="Small"
+                                        <input name="data_compromisso" type="date" class="form-control"
+                                               aria-label="Small"
                                                aria-describedby="inputGroup-sizing-sm"
                                                value="{{ tarefa.data_compromisso|date:"Y-m-d" }}">
                                     </div>
@@ -74,7 +110,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Hora inicio:</span>
                                         </div>
-                                        <input type="time" class="form-control" aria-label="Small"
+                                        <input name="hora_inicio" type="time" class="form-control" aria-label="Small"
                                                aria-describedby="inputGroup-sizing-sm"
                                                value="{{ tarefa.hora_inicio }}">
                                     </div>
@@ -83,7 +119,7 @@
                                             <span class="input-group-text"
                                                   id="inputGroup-sizing-sm">Hora término:</span>
                                         </div>
-                                        <input type="time" class="form-control" aria-label="Small"
+                                        <input name="hora_fim" type="time" class="form-control" aria-label="Small"
                                                aria-describedby="inputGroup-sizing-sm"
                                                value="{{ tarefa.hora_fim }}">
                                     </div>
@@ -91,7 +127,8 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Local</span>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Small"
+                                        <input name="local_compromisso" type="text" class="form-control"
+                                               aria-label="Small"
                                                aria-describedby="inputGroup-sizing-sm"
                                                value="{{ tarefa.local_compromisso }}">
                                     </div>
@@ -99,16 +136,18 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Observações</span>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Small"
+                                        <input name="observacoes" type="text" class="form-control" aria-label="Small"
                                                aria-describedby="inputGroup-sizing-sm"
                                                value="{{ tarefa.observacoes }}">
                                     </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
                                 </form>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                <button type="button" class="btn btn-primary">Salvar</button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -122,7 +161,7 @@
                 <td>
                     <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal"
                             data-target="#{{ tarefa.id }}">
-                        Ações
+                        Editar
                     </button>
                     <i class="bi bi-trash-fill"></i>
                 </td>

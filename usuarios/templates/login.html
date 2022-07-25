@@ -17,23 +17,19 @@
         <div class="alert alert-danger" role="alert">
             Senha incorreta!
         </div>
-    {% endif %}
-    {% if status == '2' %}
+    {% elif status == '2' %}
         <div class="alert alert-danger" role="alert">
             Erro no sistema!
         </div>
-    {% endif %}
-    {% if status == '3' %}
+    {% elif status == '3' %}
         <div class="alert alert-danger" role="alert">
             Faça login primeiro!
         </div>
-    {% endif %}
-    {% if status == '4' %}
+    {% elif status == '4' %}
         <div class="alert alert-success" role="alert">
             Deslogado com sucesso!
         </div>
-    {% endif %}
-    {% if status == '5' %}
+    {% elif status == '5' %}
         <div class="alert alert-danger" role="alert">
             Email não cadastrado no sistema!
         </div>
