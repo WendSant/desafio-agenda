@@ -36,7 +36,7 @@ def edicao_Tarefa(request):
         return redirect('/tarefa/index/?erro=5')
 
     if tarefa.usuario.id != request.session['usuario']:
-        return redirect('/tarefa/index/?erro=2')
+        return redirect('/tarefa/index/?erro=2') #Erro tarefa invalida caso usuario tente mudar o id
 
     # Filtrando uma gambiarra
     tarefas = Tarefas.objects.filter(usuario=usuarioLogado, data_compromisso=data_compromisso,
@@ -50,17 +50,17 @@ def edicao_Tarefa(request):
         if tarefas[contador].id == tarefa.id:
             pass
         else:
-            return redirect('/tarefa/index/?erro=3')
+            return redirect('/tarefa/index/?erro=3') #Erro conflito de hora
     for contador in range(tarefas2.count()):
         if tarefas2[contador].id == tarefa.id:
             pass
         else:
-            return redirect('/tarefa/index/?erro=3')
+            return redirect('/tarefa/index/?erro=3') #Erro conflito de hora
 
     data_hoje = datetime.date.today()
     data_hoje = data_hoje.__str__()
     if data_compromisso < data_hoje:
-        return redirect('/tarefa/index/?erro=4')
+        return redirect('/tarefa/index/?erro=4') #Erro data já passou
 
     try:
         tarefa.nome_compromisso = nome_compromisso
@@ -73,4 +73,4 @@ def edicao_Tarefa(request):
         tarefa.save()
         return redirect('/tarefa/index/')
     except:
-        return redirect('/tarefa/index/?erro=1')
+        return redirect('/tarefa/index/?erro=1') #Erro interno no sistema
