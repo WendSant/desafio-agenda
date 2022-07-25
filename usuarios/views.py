@@ -8,6 +8,8 @@ def inicioRedirect(request):
     return redirect('/auth/login/')
 
 def login(request):
+    if request.session.get('usuario'):
+        return redirect('/tarefa/index/')
     status = request.GET.get('status')
     return render(request, 'login.html', {'status': status})
 
