@@ -17,7 +17,6 @@ def index(request):
     else:
         return redirect('/auth/login/?status=3')
 
-
 def edicao_Tarefa(request):
     id_compromisso = request.POST.get('id_compromisso')
     nome_compromisso = request.POST.get('nome_compromisso')
@@ -33,7 +32,7 @@ def edicao_Tarefa(request):
     hora_inicialVerify = datetime.datetime.strptime(hora_inicio, '%H:%M')
     hora_finalVerify = datetime.datetime.strptime(hora_fim, '%H:%M')
     if hora_inicialVerify > hora_finalVerify:
-        return redirect('/tarefa/index/?erro=5')
+        return redirect('/tarefa/index/?erro=5') #Erro hora inicial maior que hora final
 
     if tarefa.usuario.id != request.session['usuario']:
         return redirect('/tarefa/index/?erro=2') #Erro tarefa invalida caso usuario tente mudar o id
