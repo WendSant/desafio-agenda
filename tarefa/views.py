@@ -53,7 +53,7 @@ def remove_Tarefa(request):
             tarefa = Tarefas.objects.get(id=id_compromisso).delete()
             return redirect('/tarefa/index/')
         else:
-            return redirect('/tarefa/index/?hehe=3')
+            return redirect('/tarefa/index/?erro=1')
     else:
         return redirect('/auth/login/?status=2')
 
