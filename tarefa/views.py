@@ -29,47 +29,33 @@ def edicao_Tarefa(request):
     usuarioLogado = Usuario.objects.get(id=request.session['usuario'])
     tarefa = get_object_or_404(Tarefas, id=id_compromisso)
 
-    hora_inicialVerify = datetime.datetime.strptime(hora_inicio, '%H:%M')
-    hora_finalVerify = datetime.datetime.strptime(hora_fim, '%H:%M')
-    if hora_inicialVerify > hora_finalVerify:
-        return redirect('/tarefa/index/?erro=5') #Erro hora inicial maior que hora final
+    return tarefa.check_conflito(request=request, data_compromisso=data_compromisso, hora_inicio=hora_inicio, hora_fim=hora_fim, usuarioLogado=usuarioLogado, nome_compromisso=nome_compromisso, status_compromisso=status_compromisso, local_compromisso=local_compromisso, observacoes=observacoes )
 
-    if tarefa.usuario.id != request.session['usuario']:
-        return redirect('/tarefa/index/?erro=2') #Erro tarefa invalida caso usuario tente mudar o id
+def add_Tarefa(request):
+    nome_compromisso = request.POST.get('nome_compromisso')
+    status_compromisso = request.POST.get('status_compromisso')
+    data_compromisso = request.POST.get('data_compromisso')
+    hora_inicio = request.POST.get('hora_inicio')
+    hora_fim = request.POST.get('hora_fim')
+    local_compromisso = request.POST.get('local_compromisso')
+    observacoes = request.POST.get('observacoes')
+    usuarioLogado = Usuario.objects.get(id=request.session['usuario'])
 
-    # Filtrando uma gambiarra
-    tarefas = Tarefas.objects.filter(usuario=usuarioLogado, data_compromisso=data_compromisso,
-                                     hora_inicio__range=[hora_inicio, hora_fim])
-    tarefas2 = Tarefas.objects.filter(usuario=usuarioLogado, data_compromisso=data_compromisso,
-                                      hora_fim__range=[hora_inicio, hora_fim])
+    tarefa = Tarefas(usuario=usuarioLogado)
 
-    # print(tarefas.filter(nome_compromisso= nome_compromisso, status_compromisso=status_compromisso, data_compromisso=data_compromisso, hora_inicio= hora_inicio, hora_fim= hora_fim,local_compromisso=local_compromisso, observacoes= observacoes))
+    return tarefa.check_conflito(request=request, data_compromisso=data_compromisso, hora_inicio=hora_inicio, hora_fim=hora_fim, usuarioLogado=usuarioLogado, nome_compromisso=nome_compromisso, status_compromisso=status_compromisso, local_compromisso=local_compromisso, observacoes=observacoes )
 
-    for contador in range(tarefas.count()):
-        if tarefas[contador].id == tarefa.id:
-            pass
+def remove_Tarefa(request):
+    id_compromisso = request.POST.get('id_compromisso')
+    if request.session.get('usuario'):
+        tarefas = Tarefas.objects.get(id=id_compromisso)
+        if request.session.get('usuario') == tarefas.usuario.id:
+            tarefa = Tarefas.objects.get(id=id_compromisso).delete()
+            return redirect('/tarefa/index/')
         else:
-            return redirect('/tarefa/index/?erro=3') #Erro conflito de hora
-    for contador in range(tarefas2.count()):
-        if tarefas2[contador].id == tarefa.id:
-            pass
-        else:
-            return redirect('/tarefa/index/?erro=3') #Erro conflito de hora
+            return redirect('/tarefa/index/?hehe=3')
+    else:
+        return redirect('/auth/login/?status=2')
 
-    data_hoje = datetime.date.today()
-    data_hoje = data_hoje.__str__()
-    if data_compromisso < data_hoje:
-        return redirect('/tarefa/index/?erro=4') #Erro data já passou
 
-    try:
-        tarefa.nome_compromisso = nome_compromisso
-        tarefa.status_compromisso = status_compromisso
-        tarefa.data_compromisso = data_compromisso
-        tarefa.hora_inicio = hora_inicio
-        tarefa.hora_fim = hora_fim
-        tarefa.local_compromisso = local_compromisso
-        tarefa.observacoes = observacoes
-        tarefa.save()
-        return redirect('/tarefa/index/')
-    except:
-        return redirect('/tarefa/index/?erro=1') #Erro interno no sistema
+

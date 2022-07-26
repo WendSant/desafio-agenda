@@ -43,14 +43,108 @@
             <div class="alert alert-danger" role="alert">
                 Essa data já passou, insira outra!
             </div>
-            {% elif erro == '5' %}
+        {% elif erro == '5' %}
             <div class="alert alert-danger" role="alert">
                 Horário invalido!
             </div>
+        {% elif erro == '6' %}
+            <div class="alert alert-danger" role="alert">
+                Preencha todos os campos!
+            </div>
         {% endif %}
+        <div class="modal fade" id="add_Tarefa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"
+                            id="exampleModalLabel">Adicionar tarefa</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'add_Tarefa' %}" class="needs-validation"
+                              novalidate>{% csrf_token %}
+                            <input hidden name="id_compromisso" type="text">
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Compromisso</span>
+                                </div>
+                                <input name="nome_compromisso" type="text" class="form-control"
+                                       aria-label="Small"
+                                       aria-describedby="inputGroup-sizing-sm" required
+                                >
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Status</label>
+                                </div>
+                                <select name="status_compromisso" class="custom-select" id="inputGroupSelect01">
+
+                                    <option selected
+                                            value="agendado">Agendado
+                                    </option>
+                                    <option value="realizado">Realizado</option>
+                                    <option value="cancelado">Cancelado</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Data</span>
+                                </div>
+                                <input name="data_compromisso" type="date" class="form-control"
+                                       aria-label="Small"
+                                       aria-describedby="inputGroup-sizing-sm"
+                                >
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Hora inicio:</span>
+                                </div>
+                                <input name="hora_inicio" type="time" class="form-control" aria-label="Small"
+                                       aria-describedby="inputGroup-sizing-sm"
+                                >
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                            <span class="input-group-text"
+                                                  id="inputGroup-sizing-sm">Hora término:</span>
+                                </div>
+                                <input name="hora_fim" type="time" class="form-control" aria-label="Small"
+                                       aria-describedby="inputGroup-sizing-sm"
+                                >
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Local</span>
+                                </div>
+                                <input name="local_compromisso" type="text" class="form-control"
+                                       aria-label="Small"
+                                       aria-describedby="inputGroup-sizing-sm"
+                                >
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Observações</span>
+                                </div>
+                                <input name="observacoes" type="text" class="form-control" aria-label="Small"
+                                       aria-describedby="inputGroup-sizing-sm"
+                                >
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar
+                                </button>
+                                <button type="submit" class="btn btn-primary">Adicionar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         {% for tarefa in tarefas %}
             <tr>
-                <div class="modal fade" id="{{ tarefa.id }}" tabindex="-1" role="dialog"
+                <div class="modal fade" id="edit{{ tarefa.id }}" tabindex="-1"
                      aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -58,7 +152,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title"
                                     id="exampleModalLabel">{{ tarefa.nome_compromisso.capitalize }}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -141,9 +235,10 @@
                                                value="{{ tarefa.observacoes }}">
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar
                                         </button>
-                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                        <button type="submit" class="btn btn-primary">Editar</button>
+
                                     </div>
                                 </form>
                             </div>
@@ -151,35 +246,64 @@
                         </div>
                     </div>
                 </div>
-                <th scope="row">{{ tarefa.status_compromisso.capitalize }}</th>
-                <td>{{ tarefa.nome_compromisso }}</td>
-                <td>{{ tarefa.data_compromisso }}</td>
-                <td>{{ tarefa.hora_inicio }}</td>
-                <td>{{ tarefa.hora_fim }}</td>
-                <td>{{ tarefa.local_compromisso }}</td>
-                <td>{{ tarefa.observacoes }}</td>
-                <td>
-                    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal"
-                            data-target="#{{ tarefa.id }}">
-                        Editar
-                    </button>
-                    <i class="bi bi-trash-fill"></i>
-                </td>
+
+                <div class="modal fade" id="del{{ tarefa.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"
+                                    id="exampleModalLabel">Deseja realmente apagar?</h5>
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="POST" action="{% url 'remove_Tarefa' %}">
+                                {% csrf_token %}
+                                <input hidden name="id_compromisso" type="text" value="{{ tarefa.id }}">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar
+                                    </button>
+                                    <button type="submit" class="btn btn-danger">Apagar</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <th scope="row">{{ tarefa.status_compromisso.capitalize }}</th>
+                    <td>{{ tarefa.nome_compromisso }}</td>
+                    <td>{{ tarefa.data_compromisso }}</td>
+                    <td>{{ tarefa.hora_inicio }}</td>
+                    <td>{{ tarefa.hora_fim }}</td>
+                    <td>{{ tarefa.local_compromisso }}</td>
+                    <td>{{ tarefa.observacoes }}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#edit{{ tarefa.id }}">
+                            Editar
+                        </button>
+
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#del{{ tarefa.id }}">
+                            Apagar
+                        </button>
+                    </td>
+                </div>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
     <a class="btn btn-danger btn-lg" href="{% url 'sair' %}"> Sair</a>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_Tarefa">
+        Adicionar Tarefa
+    </button>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+        integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
         crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+        integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK"
         crossorigin="anonymous"></script>
 </body>
-
 </html>
