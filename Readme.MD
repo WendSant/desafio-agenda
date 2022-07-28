@@ -35,9 +35,7 @@
 
 - <p style="font-size: 15px;" >Primeiramente tenha uma versão do python igual ou  acima da versão 3.8 instalado no seu ambiente</p>
 - <p style="font-size: 15px;" > Se não tiver o pip instalado faça a instalação </>
-```bash
-$ sudo apt-get install python-pip
-```
+
 - <p style="font-size: 15px;" > No diretorio do projeto e com pip instalado comece a instalar o virtualenv </>
 ```
 $ pip install virtualenv
@@ -48,7 +46,7 @@ $ virtualenv venv ou python -m venv venv
 ```
 - <p style="font-size: 15px;" > Após isso é hora de iniciar o ambiente virtual</>
 ```
-$ source venv/bin/activate 
+$ source venv/Scripts/activate 
 ```
 - <p style="font-size: 15px;" > Agora rode esse comando para instalar todos os requirements</>
 ```
