@@ -1,5 +1,7 @@
+import csv
 import datetime
 
+from django.http import HttpResponse
 from django.utils.timezone import now, localtime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -63,10 +65,31 @@ def remove_Tarefa(request):
             tarefa = Tarefas.objects.get(id=id_compromisso).delete()
             return redirect('/tarefa/index/')
         else:
-            return redirect('/tarefa/index/?erro=1') #Erro interno no sistema
+            return redirect('/tarefa/index/?erro=1')  # Erro interno no sistema
     else:
         return redirect('/auth/login/?status=2')
+
 
 def filtrar_Tarefa(request):
     tarefa = Tarefas()
     return tarefa.filtrar(request=request)
+
+
+def exportar_planilha(request):
+    global response
+    if request.method == 'POST':
+        usuarioLogado = Usuario.objects.get(id=request.session['usuario'])
+        tarefas = Tarefas.objects.filter(usuario=usuarioLogado)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=ConsultaTarefas' + str(datetime.datetime.now()) + '.csv'
+        writer = csv.writer(response)
+        writer.writerow(['Status_Compromisso', 'Nome_Compromisso', 'Data_Compromisso', 'Hora_Inicio', 'Hora_Fim', 'Local_Compromisso', 'Observações'])
+
+        for info in tarefas:
+            if ',' in info.local_compromisso:
+               info.local_compromisso= info.local_compromisso.replace(',', ' ')
+            if ',' in info.observacoes:
+                info.observacoes = info.observacoes.replace(',', ' ')
+            writer.writerow(
+                [info.status_compromisso, info.nome_compromisso, info.data_compromisso, info.hora_fim, info.hora_fim, info.local_compromisso, info.observacoes])
+    return response
