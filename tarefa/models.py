@@ -94,13 +94,6 @@ class Tarefas(models.Model):
         local_compromisso = request.POST.get('local_compromisso')
         observacoes = request.POST.get('observacoes')
 
-        # print(nome_compromisso)
-        # print(status_compromisso)
-        # print(data_compromisso)
-        # print(local_compromisso)
-        # print(f'HORA INICIO{hora_inicio}')
-        # print(f'HORA fim{hora_fim}')
-
         if observacoes.strip() == '':
             observacoes = None
 
@@ -109,18 +102,28 @@ class Tarefas(models.Model):
                 return redirect('/tarefa/index/?erro=7')  # Erro preencha uma data para consultar horas
             try:
                 if (hora_inicio and hora_fim) and data_compromisso:
-                    tarefa = Tarefas.objects.filter(usuario=usuarioLogado, data_compromisso=data_compromisso, hora_inicio__range=[hora_inicio,hora_fim]) or Tarefas.objects.filter(usuario=usuarioLogado, data_compromisso=data_compromisso, hora_fim__range=[hora_inicio,hora_fim])
+                    tarefa_1 = Tarefas.objects.filter(usuario=usuarioLogado, data_compromisso=data_compromisso,
+                                                    hora_inicio__range=[hora_inicio,
+                                                                        hora_fim])
+                    print(tarefa_1)
+                    tarefa_2 = Tarefas.objects.filter(
+                        usuario=usuarioLogado, data_compromisso=data_compromisso,
+                        hora_fim__range=[hora_inicio, hora_fim])
+                    print(tarefa_2)
+                    tarefa = tarefa_1 | tarefa_2
                     return render(request, 'index.html', {'tarefas': tarefa, 'erro': erros})
                 elif observacoes and not status_compromisso and not local_compromisso and not data_compromisso and not nome_compromisso and not hora_fim and not hora_inicio:
                     try:
                         obs = Tarefas.objects.filter(usuario=usuarioLogado, observacoes=observacoes)
                         tarefa = obs
+                        if tarefa.count() == 0:
+                            return redirect('/tarefa/index/?erro=8')
                         return render(request, 'index.html', {'tarefas': tarefa, 'erro': erros})
                     except:
                         return redirect('/tarefa/index/?erro=8')
                 else:
                     tarefa = Tarefas.objects.filter(usuario=usuarioLogado,
-                                                     nome_compromisso=nome_compromisso) or Tarefas.objects.filter(
+                                                    nome_compromisso=nome_compromisso) or Tarefas.objects.filter(
                         usuario=usuarioLogado, status_compromisso=status_compromisso) or Tarefas.objects.filter(
                         usuario=usuarioLogado, local_compromisso=local_compromisso) or Tarefas.objects.filter(
                         usuario=usuarioLogado, data_compromisso=data_compromisso) or Tarefas.objects.filter(
