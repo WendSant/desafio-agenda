@@ -49,8 +49,7 @@ def valida_login(request):
 
     usuario = Usuario.objects.filter(email = email).filter(senha = senha)
 
-    # if len(usuario) == 0:
-    #     return redirect('/auth/login/?status=1')
+
     if len(Usuario.objects.filter(email = email)) > 0 and len(Usuario.objects.filter(senha = senha)) ==0:
         return redirect('/auth/login/?status=1') #Usuario cadastrado mas senha incorreta
     elif len(Usuario.objects.filter(email = email)) == 0:
