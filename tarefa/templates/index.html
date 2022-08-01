@@ -17,22 +17,23 @@
 
 <div class="container faixaMain">
     <div>
-        <h4><i class="fa-solid fa-clipboard-list"></i> Agenda</h4>
+        <h4 class="hahs"><i class="fa-solid fa-clipboard-list"></i> Agenda</h4>
+<i class="hahs">Bem vindo, {{ usuario.nome }}</i>
     </div>
 
 
 
-    <div>
+    <div class="gaap">
         <form method="POST" class="testes" action="{% url 'exportar_planilha' %}">
                     <input type="hidden" name="csv_sender" value="{{ tarefas }}"/>
                     {% csrf_token %}
                     <button type="submit" class="btn btn-success" name="submit">
                         <a>Baixar Planilha</a>
                     </button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_Tarefa">
+            <button type="button" class="btn btn-primary" style="margin-left: 1rem;" data-bs-toggle="modal" data-bs-target="#add_Tarefa">
             <i class="fa-regular fa-plus"></i> Adicionar Tarefa
         </button>
-        <a class="btn btn-danger " href="{% url 'sair' %}"> Sair <i
+        <a class="btn btn-danger" style="margin-left: 1rem;" href="{% url 'sair' %}"> Sair <i
                 class="fa-solid fa-arrow-right-from-bracket"></i></a>
         </form>
 

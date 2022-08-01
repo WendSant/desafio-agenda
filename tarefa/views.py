@@ -15,7 +15,7 @@ def index(request):
         usuarioLogado = Usuario.objects.get(id=request.session['usuario'])
         erros = request.GET.get('erro')
         tarefas = Tarefas.objects.filter(usuario=usuarioLogado)
-        return render(request, 'index.html', {'tarefas': tarefas, 'erro': erros})
+        return render(request, 'index.html', {'tarefas': tarefas, 'erro': erros, 'usuario': usuarioLogado})
 
     else:
         return redirect('/auth/login/?status=3')
