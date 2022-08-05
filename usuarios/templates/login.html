@@ -14,10 +14,10 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="conteudo col-sm">
-            <img src="{% static 'usuarios/imgs/bg.png' %}">
+        <div class="conteudo col-12 col-md-8">
+            <img src="{% static 'usuarios/imgs/bg.png' %}" class="imagemBG" >
         </div>
-        <div class="mainContent col-sm">
+        <div class="mainContent col-12 col-md-4" >
             {% if status == '1' %}
                 <div class="alert alert-danger" role="alert">
                     Senha incorreta!
